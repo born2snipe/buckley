@@ -8,12 +8,14 @@ public class TextField extends Field {
         super(name, x, y, height, width);
     }
 
-    public Font getFont() {
-        return font;
+    public TextField(String name, int x, int y, int width, int height, Font font) {
+        this(name, x, y, width, height);
+        this.font = font;
     }
 
-    public void setFont(Font font) {
-        this.font = font;
+
+    public Font getFont() {
+        return font;
     }
 
     public static class Font {

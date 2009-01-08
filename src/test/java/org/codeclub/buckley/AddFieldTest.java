@@ -1,5 +1,6 @@
 package org.codeclub.buckley;
 
+import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
 import junit.framework.TestCase;
 import org.codeclub.buckley.compile.Compiler;
@@ -22,12 +23,13 @@ public class AddFieldTest extends TestCase {
         File compiledPdf = compiler.compile(file, compiled, createTextFieldDocument("blah"));
 
         PdfReader reader = new PdfReader(new FileInputStream(compiledPdf));
-        assertNotNull(reader.getAcroForm().getField("blah"));
+        AcroFields fields = reader.getAcroFields();
+        assertNotNull(fields.getField("blah"));
     }
 
     private Document createTextFieldDocument(String fieldName) {
         Page page = new Page(1);
-        page.addField(new TextField(fieldName, 10, 10, 100, 20));
+        page.addField(new TextField(fieldName, 10, 10, 100, 25));
         Document doc = new Document();
         doc.addPage(page);
         return doc;

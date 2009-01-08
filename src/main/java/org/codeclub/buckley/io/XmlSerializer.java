@@ -50,8 +50,7 @@ public class XmlSerializer {
         Page page1 = new Page(1);
         page1.addField(new TextField("field1", 0, 0, 0, 0));
 
-        TextField field = new TextField("field2", 0, 0, 0, 0);
-        field.setFont(new TextField.Font("Courier", 12));
+        TextField field = new TextField("field2", 0, 0, 0, 0, new TextField.Font("Courier", 12));
 
         page1.addField(field);
         page1.addField(new TextField("field3", 0, 0, 0, 0));

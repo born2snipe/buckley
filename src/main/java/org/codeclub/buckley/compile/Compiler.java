@@ -1,23 +1,26 @@
 package org.codeclub.buckley.compile;
 
 import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.*;
 import org.codeclub.buckley.Field;
+import org.codeclub.buckley.Page;
+import org.codeclub.buckley.Pdf;
 import org.codeclub.buckley.TextField;
 import org.codeclub.buckley.io.XmlSerializer;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class Compiler {
     private XmlSerializer serializer = new XmlSerializer();
-    private Map<Class, AddField> fieldAdders = new HashMap<Class, AddField>();
+    private Map<Class, FieldAdder> fieldAdders = new HashMap<Class, FieldAdder>();
 
     public Compiler() {
-        fieldAdders.put(TextField.class, new AddTextField());
+        fieldAdders.put(TextField.class, new TextFieldAdder(new FontRegistry()));
     }
 
     public File compile(File pdfTemplate, File compiledPdfTemplate, File xmlFile) {
@@ -28,65 +31,31 @@ public class Compiler {
         }
     }
 
-    public File compile(File pdfTemplate, File compiledPdfTemplate, org.codeclub.buckley.Document doc) {
-        PdfReader reader = null;
-        PdfWriter writer = null;
+    public File compile(File pdfTemplate, File compiledPdfTemplate, final org.codeclub.buckley.Document doc) {
+        Pdf pdf = new Pdf(pdfTemplate, compiledPdfTemplate);
         try {
-            reader = new PdfReader(pdfTemplate.toURI().toURL());
-            Document document = new Document(reader.getPageSizeWithRotation(1));
-            writer = PdfWriter.getInstance(document, new FileOutputStream(compiledPdfTemplate));
-            PdfAcroForm form = new PdfAcroForm(writer);
-            document.open();
-            PdfContentByte content = writer.getDirectContent();
-            try {
-                for (int i = 1; i <= reader.getNumberOfPages(); i++) {
-                    PdfImportedPage importedPage = writer.getImportedPage(reader, i);
+            pdf.eachPage(new Pdf.PageHandler() {
+                public void handlePage(int number, PdfReader reader, PdfWriter writer, Document document, PdfAcroForm form) {
+                    PdfContentByte content = writer.getDirectContent();
+                    PdfImportedPage importedPage = writer.getImportedPage(reader, number);
                     content.addTemplate(importedPage, 0.0f, 0.0f);
-                    for (Field field : doc.getPage(i).getFields()) {
-                        createFieldAdder(field).add(form, field);
+                    Page page = doc.getPage(number);
+                    if (page != null) {
+                        for (Field field : page.getFields()) {
+                            createFieldAdder(field).add(form, field);
+                        }
                     }
                     document.newPage();
                 }
-            } finally {
-                document.close();
-            }
-
-            return pdfTemplate;
-        } catch (DocumentException e) {
-            throw new RuntimeException(e);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            });
+            return compiledPdfTemplate;
         } finally {
-            if (reader != null) {
-                reader.close();
-            }
-            if (writer != null) {
-                writer.close();
-            }
+            pdf.close();
         }
     }
 
-    private AddField createFieldAdder(Field field) {
+    private FieldAdder createFieldAdder(Field field) {
         return fieldAdders.get(field.getClass());
     }
 
-    private static class AddTextField implements AddField<org.codeclub.buckley.TextField> {
-        public void add(PdfAcroForm form, org.codeclub.buckley.TextField field) {
-            try {
-                BaseFont font = BaseFont.createFont();
-                float fontSize = field.getFont() == null ? 0.0f : field.getFont().getSize();
-                form.addSingleLineTextField(field.getName(), "", font, fontSize, field.getX(), field.getY(), field.getWidth(), field.getHeight());
-            } catch (DocumentException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    private static interface AddField<T extends Field> {
-        void add(PdfAcroForm form, T field);
-    }
 }
