@@ -22,9 +22,9 @@ public class TextFieldAdderTest extends TestCase {
         when(fontRegistry.getDefaultFont()).thenReturn(font);
         when(fontRegistry.getDefaultFontSize()).thenReturn(12.0f);
 
-        adder.add(form, field);
+        adder.add(form, field, 100);
 
-        verify(form).addSingleLineTextField(field.getName(), "", font, 12.0f, 1.0f, 2.0f, 3.0f, 4.0f);
+        verify(form).addSingleLineTextField(field.getName(), "", font, 12.0f, 1.0f, 94.0f, 4.0f, 98.0f);
         verify(fontRegistry).getDefaultFont();
         verify(fontRegistry).getDefaultFontSize();
     }
@@ -34,9 +34,9 @@ public class TextFieldAdderTest extends TestCase {
 
         when(fontRegistry.getFont("Courier")).thenReturn(font);
 
-        adder.add(form, field);
+        adder.add(form, field, 100);
 
-        verify(form).addSingleLineTextField(field.getName(), "", font, 12.0f, 1.0f, 2.0f, 3.0f, 4.0f);
+        verify(form).addSingleLineTextField(field.getName(), "", font, 12.0f, 1.0f, 94.0f, 4.0f, 98.0f);
         verify(fontRegistry).getFont("Courier");
     }
 

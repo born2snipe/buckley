@@ -5,14 +5,14 @@ import com.lowagie.text.pdf.PdfAcroForm;
 import org.codeclub.buckley.TextField;
 
 
-public class TextFieldAdder implements FieldAdder<TextField> {
+public class TextFieldAdder extends AbstractFieldAdder<TextField> {
     private FontRegistry fontRegistry;
 
     public TextFieldAdder(FontRegistry fontRegistry) {
         this.fontRegistry = fontRegistry;
     }
 
-    public void add(PdfAcroForm form, TextField field) {
+    protected void addField(PdfAcroForm form, TextField field, float x, float y, float offX, float offY) {
         BaseFont pdfFont;
         float fontSize;
         if (field.getFontName() != null) {
@@ -22,6 +22,6 @@ public class TextFieldAdder implements FieldAdder<TextField> {
             pdfFont = fontRegistry.getDefaultFont();
             fontSize = fontRegistry.getDefaultFontSize();
         }
-        form.addSingleLineTextField(field.getName(), "", pdfFont, fontSize, field.getX(), field.getY(), field.getWidth(), field.getHeight());
+        form.addSingleLineTextField(field.getName(), "", pdfFont, fontSize, x, y, offX, offY);
     }
 }

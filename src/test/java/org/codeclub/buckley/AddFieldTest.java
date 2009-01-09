@@ -2,6 +2,7 @@ package org.codeclub.buckley;
 
 import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.BaseFont;
 import junit.framework.TestCase;
 import org.codeclub.buckley.compile.Compiler;
 import org.codeclub.buckley.compile.FontRegistry;
@@ -31,6 +32,8 @@ public class AddFieldTest extends TestCase {
     private Document createTextFieldDocument(String fieldName) {
         Page page = new Page(1);
         page.addField(new TextField(fieldName, 10, 10, 100, 25));
+        page.addField(new TextField("blah3", 10, 60, 100, 25, BaseFont.TIMES_ROMAN, 12.0f));
+        page.addField(new CheckboxField("blah2", "On", 10, 40, 20, 20));
         Document doc = new Document();
         doc.addPage(page);
         return doc;

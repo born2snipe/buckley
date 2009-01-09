@@ -7,8 +7,8 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 
 
@@ -18,12 +18,12 @@ public class Pdf {
     private Document document;
     private PdfAcroForm pdfAcroForm;
 
-    public Pdf(File template, File form) {
+    public Pdf(File template, OutputStream outputStream) {
         boolean errorOccured = false;
         try {
             reader = new PdfReader(template.toURI().toURL());
             document = new Document(reader.getPageSizeWithRotation(1));
-            writer = PdfWriter.getInstance(document, new FileOutputStream(form));
+            writer = PdfWriter.getInstance(document, outputStream);
             pdfAcroForm = new PdfAcroForm(writer);
             document.open();
         } catch (MalformedURLException e) {

@@ -5,5 +5,5 @@ import org.codeclub.buckley.Field;
 
 
 public interface FieldAdder<T extends Field> {
-    void add(PdfAcroForm form, T field);
+    void add(PdfAcroForm form, T field, float documentHeight);
 }

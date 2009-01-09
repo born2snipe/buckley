@@ -1,10 +1,7 @@
 package org.codeclub.buckley.io;
 
 import com.thoughtworks.xstream.XStream;
-import org.codeclub.buckley.Document;
-import org.codeclub.buckley.EmbeddedFont;
-import org.codeclub.buckley.Page;
-import org.codeclub.buckley.TextField;
+import org.codeclub.buckley.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -16,6 +13,7 @@ public class XmlSerializer {
 
     public XmlSerializer() {
         xstream.alias("textField", TextField.class);
+        xstream.alias("checkboxField", CheckboxField.class);
         xstream.alias("page", Page.class);
         xstream.alias("document", Document.class);
         xstream.alias("embeddedFont", EmbeddedFont.class);
@@ -51,6 +49,8 @@ public class XmlSerializer {
         XmlSerializer serializer = new XmlSerializer();
 
         Document doc = new Document();
+
+        doc.getFontRegistry().registerFont(new EmbeddedFont("Blah", "Blah", new byte[]{1, 2 , 3 ,4}));
 
         Page page1 = new Page(1);
         page1.addField(new TextField("field1", 0, 0, 0, 0));

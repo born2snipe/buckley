@@ -6,6 +6,9 @@ import org.codeclub.buckley.*;
 import org.codeclub.buckley.TextField;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,9 +21,10 @@ public class Compiler {
         fieldAdders.put(CheckboxField.class, new CheckboxFieldAdder());
     }
 
-    public File compile(File pdfTemplate, File compiledPdfTemplate, final org.codeclub.buckley.Document doc) {
-        Pdf pdf = new Pdf(pdfTemplate, compiledPdfTemplate);
+    public void compile(File pdfTemplate, OutputStream output, final org.codeclub.buckley.Document doc) {
+        Pdf pdf = null;
         try {
+            pdf = new Pdf(pdfTemplate, output);
             pdf.eachPage(new Pdf.PageHandler() {
                 public void handlePage(int number, PdfReader reader, PdfWriter writer, Document document, PdfAcroForm form) {
                     PdfContentByte content = writer.getDirectContent();
@@ -29,15 +33,24 @@ public class Compiler {
                     Page page = doc.getPage(number);
                     if (page != null) {
                         for (Field field : page.getFields()) {
-                            createFieldAdder(field).add(form, field);
+                            createFieldAdder(field).add(form, field, importedPage.getHeight());
                         }
                     }
                     document.newPage();
                 }
             });
-            return compiledPdfTemplate;
         } finally {
-            pdf.close();
+            if (pdf != null)
+                pdf.close();
+        }
+    }
+
+    public File compile(File pdfTemplate, File compiledPdfTemplate, org.codeclub.buckley.Document doc) {
+        try {
+            compile(pdfTemplate, new FileOutputStream(compiledPdfTemplate), doc);
+            return compiledPdfTemplate;
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
