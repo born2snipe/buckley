@@ -2,33 +2,20 @@ package org.codeclub.buckley.compile;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.pdf.*;
-import org.codeclub.buckley.Field;
-import org.codeclub.buckley.Page;
-import org.codeclub.buckley.Pdf;
+import org.codeclub.buckley.*;
 import org.codeclub.buckley.TextField;
-import org.codeclub.buckley.io.XmlSerializer;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class Compiler {
-    private XmlSerializer serializer = new XmlSerializer();
     private Map<Class, FieldAdder> fieldAdders = new HashMap<Class, FieldAdder>();
 
-    public Compiler() {
-        fieldAdders.put(TextField.class, new TextFieldAdder(new FontRegistry()));
-    }
-
-    public File compile(File pdfTemplate, File compiledPdfTemplate, File xmlFile) {
-        try {
-            return compile(pdfTemplate, compiledPdfTemplate, serializer.deserialize(new FileInputStream(xmlFile)));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public Compiler(FontRegistry fontRegistry) {
+        fieldAdders.put(TextField.class, new TextFieldAdder(fontRegistry));
+        fieldAdders.put(CheckboxField.class, new CheckboxFieldAdder());
     }
 
     public File compile(File pdfTemplate, File compiledPdfTemplate, final org.codeclub.buckley.Document doc) {

@@ -2,6 +2,7 @@ package org.codeclub.buckley.io;
 
 import com.thoughtworks.xstream.XStream;
 import org.codeclub.buckley.Document;
+import org.codeclub.buckley.EmbeddedFont;
 import org.codeclub.buckley.Page;
 import org.codeclub.buckley.TextField;
 
@@ -15,15 +16,19 @@ public class XmlSerializer {
 
     public XmlSerializer() {
         xstream.alias("textField", TextField.class);
-        xstream.alias("font", TextField.Font.class);
         xstream.alias("page", Page.class);
         xstream.alias("document", Document.class);
+        xstream.alias("embeddedFont", EmbeddedFont.class);
         xstream.useAttributeFor(int.class);
-        xstream.useAttributeFor(float.class);
+        xstream.useAttributeFor(float.class);           
         xstream.useAttributeFor(long.class);
         xstream.useAttributeFor(double.class);
         xstream.useAttributeFor(boolean.class);
         xstream.useAttributeFor(String.class);
+        xstream.useAttributeFor(Double.class);
+        xstream.useAttributeFor(Integer.class);
+        xstream.useAttributeFor(Float.class);
+        xstream.useAttributeFor(Long.class);
     }
 
     public String serialize(Document document) {
@@ -50,7 +55,7 @@ public class XmlSerializer {
         Page page1 = new Page(1);
         page1.addField(new TextField("field1", 0, 0, 0, 0));
 
-        TextField field = new TextField("field2", 0, 0, 0, 0, new TextField.Font("Courier", 12));
+        TextField field = new TextField("field2", 0, 0, 0, 0, "Courier", 12);
 
         page1.addField(field);
         page1.addField(new TextField("field3", 0, 0, 0, 0));

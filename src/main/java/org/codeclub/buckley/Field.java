@@ -8,7 +8,7 @@ public abstract class Field {
     private float width;
     private float height;
 
-    protected Field(String name, float x, float y, float height, float width) {
+    protected Field(String name, float x, float y, float width, float height) {
         this.name = name;
         this.x = x;
         this.y = y;

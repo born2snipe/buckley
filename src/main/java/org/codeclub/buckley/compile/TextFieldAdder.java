@@ -13,12 +13,11 @@ public class TextFieldAdder implements FieldAdder<TextField> {
     }
 
     public void add(PdfAcroForm form, TextField field) {
-        TextField.Font font = field.getFont();
         BaseFont pdfFont;
         float fontSize;
-        if (font != null) {
-            pdfFont = fontRegistry.getFont(font.getName());
-            fontSize = font.getSize();
+        if (field.getFontName() != null) {
+            pdfFont = fontRegistry.getFont(field.getFontName());
+            fontSize = field.getFontSize();
         } else {
             pdfFont = fontRegistry.getDefaultFont();
             fontSize = fontRegistry.getDefaultFontSize();

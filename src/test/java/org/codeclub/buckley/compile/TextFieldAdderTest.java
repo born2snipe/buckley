@@ -30,7 +30,7 @@ public class TextFieldAdderTest extends TestCase {
     }
     
     public void test_add_SpecificFont() throws DocumentException, IOException {
-        TextField field = new TextField("name", 1, 2, 3, 4, new TextField.Font("Courier", 12));
+        TextField field = new TextField("name", 1, 2, 3, 4, "Courier", 12);
 
         when(fontRegistry.getFont("Courier")).thenReturn(font);
 

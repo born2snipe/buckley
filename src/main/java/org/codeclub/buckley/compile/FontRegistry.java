@@ -1,13 +1,17 @@
 package org.codeclub.buckley.compile;
 
-import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.FontFactory;
+import com.lowagie.text.pdf.BaseFont;
+import org.codeclub.buckley.EmbeddedFont;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FontRegistry {
+    private List<EmbeddedFont> fonts = new ArrayList<EmbeddedFont>();
 
     public FontRegistry() {
         FontFactory.defaultEmbedding = BaseFont.EMBEDDED;
@@ -23,7 +27,7 @@ public class FontRegistry {
         } catch (DocumentException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);  
+            throw new RuntimeException(e);
         }
     }
 

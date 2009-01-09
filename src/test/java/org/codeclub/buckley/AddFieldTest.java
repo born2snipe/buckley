@@ -4,6 +4,7 @@ import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
 import junit.framework.TestCase;
 import org.codeclub.buckley.compile.Compiler;
+import org.codeclub.buckley.compile.FontRegistry;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +19,7 @@ public class AddFieldTest extends TestCase {
         File file = new File(dir, "send.pdf");
         File compiled = new File(dir, "send_compiled.pdf");
 
-        Compiler compiler = new org.codeclub.buckley.compile.Compiler();
+        Compiler compiler = new org.codeclub.buckley.compile.Compiler(new FontRegistry());
 
         File compiledPdf = compiler.compile(file, compiled, createTextFieldDocument("blah"));
 
