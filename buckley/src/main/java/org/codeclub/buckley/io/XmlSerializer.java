@@ -3,9 +3,7 @@ package org.codeclub.buckley.io;
 import com.thoughtworks.xstream.XStream;
 import org.codeclub.buckley.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 
 public class XmlSerializer {
@@ -18,7 +16,7 @@ public class XmlSerializer {
         xstream.alias("document", Document.class);
         xstream.alias("embeddedFont", EmbeddedFont.class);
         xstream.useAttributeFor(int.class);
-        xstream.useAttributeFor(float.class);           
+        xstream.useAttributeFor(float.class);
         xstream.useAttributeFor(long.class);
         xstream.useAttributeFor(double.class);
         xstream.useAttributeFor(boolean.class);
@@ -45,12 +43,30 @@ public class XmlSerializer {
         return (Document) xstream.fromXML(input);
     }
 
+    public Document deserialize(File file) {
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream(file);
+            return (Document) xstream.fromXML(input);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+
+                }
+            }
+        }
+    }
+
     public static void main(String args[]) {
         XmlSerializer serializer = new XmlSerializer();
 
         Document doc = new Document();
 
-        doc.getFontRegistry().registerFont(new EmbeddedFont("Blah", "Blah", new byte[]{1, 2 , 3 ,4}));
+        doc.getFontRegistry().registerFont(new EmbeddedFont("Blah", "Blah", new byte[]{1, 2, 3, 4}));
 
         Page page1 = new Page(1);
         page1.addField(new TextField("field1", 0, 0, 0, 0));
