@@ -1,0 +1,3 @@
+A Java library that will add a form to an existing pdf through an XML definition.
+
+The idea behind this project is to allow the developer to version the layout of their form since PDFs are a binary format.  This is also suppose to address the problem of having to currently copy n' paste fields from an existing pdf to a new pdf and having to move them to their appropriate locations.
