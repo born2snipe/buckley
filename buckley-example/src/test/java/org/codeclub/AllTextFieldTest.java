@@ -29,7 +29,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class CompileInCodeTest extends TestCase {
+public class AllTextFieldTest extends TestCase {
 
     public void test() throws IOException, URISyntaxException {
         XmlSerializer serializer = new XmlSerializer();
