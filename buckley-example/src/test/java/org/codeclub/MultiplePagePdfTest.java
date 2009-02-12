@@ -26,9 +26,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-public class AllTextFieldTest extends TestCase {
 
-    public void test() throws IOException, URISyntaxException {
+public class MultiplePagePdfTest extends TestCase {
+    public void test() throws URISyntaxException, IOException {
         XmlSerializer serializer = new XmlSerializer();
 
         /**
@@ -40,14 +40,12 @@ public class AllTextFieldTest extends TestCase {
                 "  <pages>\n" +
                 "    <page number=\"1\">\n" +
                 "      <fields>\n" +
-                "        <textField name=\"firstName\" x=\"262.0\" y=\"55.0\" width=\"130.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"lastName\" x=\"85.0\" y=\"55.0\" width=\"130.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"middleInitial\" x=\"430.0\" y=\"55.0\" width=\"15.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"line1\" x=\"90.0\" y=\"96.0\" width=\"300.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"line2\" x=\"90.0\" y=\"111.0\" width=\"300.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"city\" x=\"85.0\" y=\"125.0\" width=\"125.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"state\" x=\"265.0\" y=\"125.0\" width=\"20.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"zip\" x=\"327.0\" y=\"125.0\" width=\"60.0\" height=\"15.0\"/>\n" +
+                "        <textField name=\"field1\" x=\"100.0\" y=\"100.0\" width=\"100.0\" height=\"15.0\"/>\n" +
+                "      </fields>\n" +
+                "    </page>\n" +
+                "    <page number=\"2\">\n" +
+                "      <fields>\n" +
+                "        <textField name=\"field2\" x=\"100.0\" y=\"100.0\" width=\"100.0\" height=\"15.0\"/>\n" +
                 "      </fields>\n" +
                 "    </page>\n" +
                 "  </pages>\n" +
@@ -62,13 +60,13 @@ public class AllTextFieldTest extends TestCase {
         /**
          * Now we initialize the Compiler with the FontRegistry that was configured in our XML above.
          */
-        Compiler compiler = new Compiler(document.getFontRegistry());
+        org.codeclub.buckley.compile.Compiler compiler = new Compiler(document.getFontRegistry());
 
         /**
          * The file locations where our original pdf lives and where we want the compiled pdf to live.
          */
-        File originalPdf = new File(Thread.currentThread().getContextClassLoader().getResource("original.pdf").toURI());
-        File compiledPdf = new File(originalPdf.getParent(), "compiled.pdf");
+        File originalPdf = new File(Thread.currentThread().getContextClassLoader().getResource("2_pages.pdf").toURI());
+        File compiledPdf = new File(originalPdf.getParent(), "2_pages_compiled.pdf");
 
         /**
          * We actually compile the original pdf and create our new one with the fields defined on it.
