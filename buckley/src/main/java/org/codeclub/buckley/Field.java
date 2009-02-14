@@ -20,6 +20,7 @@ public abstract class Field {
     private float width;
     private float height;
     private Alignment alignment;
+    private Border border;
 
     protected Field(String name, float x, float y, float width, float height) {
         this.name = name;
@@ -27,6 +28,14 @@ public abstract class Field {
         this.y = y;
         this.height = height;
         this.width = width;
+    }
+
+    public Border getBorder() {
+        return border;
+    }
+
+    public void setBorder(Border border) {
+        this.border = border;
     }
 
     public Alignment getAlignment() {
