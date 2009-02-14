@@ -37,6 +37,8 @@ public class XmlSerializer {
         xstream.useAttributeFor(Integer.class);
         xstream.useAttributeFor(Float.class);
         xstream.useAttributeFor(Long.class);
+        xstream.useAttributeFor(Alignment.class);
+        xstream.registerConverter(new AlignmentValueConverter());
     }
 
     public String serialize(Document document) {
