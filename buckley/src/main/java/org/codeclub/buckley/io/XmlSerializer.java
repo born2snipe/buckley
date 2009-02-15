@@ -92,6 +92,7 @@ public class XmlSerializer {
 
         TextField field = new TextField("field2", 0, 0, 0, 0, "Courier", 12);
         field.setBorder(new Border(1.0f, Color.black));
+        field.setBackgroundColor(Color.yellow);
 
         page1.addField(field);
         page1.addField(new TextField("field3", 0, 0, 0, 0));

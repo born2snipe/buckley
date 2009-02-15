@@ -12,6 +12,8 @@
  */
 package org.codeclub.buckley;
 
+import java.awt.*;
+
 
 public abstract class Field {
     private String name;
@@ -21,6 +23,8 @@ public abstract class Field {
     private float height;
     private Alignment alignment;
     private Border border;
+    private Color color;
+    private Color backgroundColor;
 
     protected Field(String name, float x, float y, float width, float height) {
         this.name = name;
@@ -28,6 +32,22 @@ public abstract class Field {
         this.y = y;
         this.height = height;
         this.width = width;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public Border getBorder() {
