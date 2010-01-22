@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
@@ -17,10 +17,7 @@ import com.lowagie.text.pdf.*;
 import org.codeclub.buckley.*;
 import org.codeclub.buckley.TextField;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +30,7 @@ public class Compiler {
         fieldAdders.put(CheckboxField.class, new CheckboxFieldAdder());
     }
 
-    public void compile(File pdfTemplate, OutputStream output, final org.codeclub.buckley.Document doc) {
+    public void compile(InputStream pdfTemplate, OutputStream output, final org.codeclub.buckley.Document doc) {
         Pdf pdf = null;
         try {
             pdf = new Pdf(pdfTemplate, output);
@@ -59,7 +56,7 @@ public class Compiler {
 
     public File compile(File pdfTemplate, File compiledPdfTemplate, org.codeclub.buckley.Document doc) {
         try {
-            compile(pdfTemplate, new FileOutputStream(compiledPdfTemplate), doc);
+            compile(new FileInputStream(pdfTemplate), new FileOutputStream(compiledPdfTemplate), doc);
             return compiledPdfTemplate;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
