@@ -16,11 +16,12 @@ import buckley.Document;
 import buckley.Field;
 import buckley.Page;
 import buckley.compile.Compiler;
-import buckley.io.XmlSerializer;
+import buckley.io.XmlDocumentHandler;
 import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
 import junit.framework.TestCase;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,7 +30,7 @@ import java.net.URISyntaxException;
 public class AllTextFieldTest extends TestCase {
 
     public void test() throws IOException, URISyntaxException {
-        XmlSerializer serializer = new XmlSerializer();
+        XmlDocumentHandler reader = new XmlDocumentHandler();
 
         /**
          * This is a String that represents our XML definition for the fields that are defined on the form.
@@ -57,7 +58,7 @@ public class AllTextFieldTest extends TestCase {
         /**
          * We now can deserialize the XML to a Document object
          */
-        Document document = serializer.deserialize(xml);
+        Document document = reader.read(new ByteArrayInputStream(xml.getBytes()));
 
         /**
          * Now we initialize the Compiler with the FontRegistry that was configured in our XML above.

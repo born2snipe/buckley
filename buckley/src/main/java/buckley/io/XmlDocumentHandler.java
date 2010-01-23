@@ -19,10 +19,10 @@ import java.awt.*;
 import java.io.*;
 
 
-public class XmlSerializer {
+public class XmlDocumentHandler implements DocumentReader, DocumentWriter {
     private XStream xstream = new XStream();
 
-    public XmlSerializer() {
+    public XmlDocumentHandler() {
         xstream.alias("textField", buckley.TextField.class);
         xstream.alias("checkboxField", CheckboxField.class);
         xstream.alias("page", Page.class);
@@ -45,29 +45,17 @@ public class XmlSerializer {
         xstream.registerConverter(new ColorValueConverter());
     }
 
-    public String serialize(Document document) {
-        return xstream.toXML(document);
-    }
-
-    public void serialize(Document document, OutputStream output) {
+    public void write(OutputStream output, Document document) {
         xstream.toXML(document, output);
     }
 
-    public Document deserialize(String xml) {
-        return deserialize(new ByteArrayInputStream(xml.getBytes()));
-    }
-
-    public Document deserialize(InputStream input) {
-        return (Document) xstream.fromXML(input);
-    }
-
-    public Document deserialize(File file) {
-        FileInputStream input = null;
+    public Document read(File file) {
+        InputStream input = null;
         try {
             input = new FileInputStream(file);
-            return (Document) xstream.fromXML(input);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            return read(input);
+        } catch (IOException err) {
+            throw new RuntimeException(err);
         } finally {
             if (input != null) {
                 try {
@@ -79,27 +67,8 @@ public class XmlSerializer {
         }
     }
 
-    public static void main(String args[]) {
-        XmlSerializer serializer = new XmlSerializer();
-
-        Document doc = new Document();
-
-        doc.getFontRegistry().registerFont(new EmbeddedFont("Blah", "Blah", new byte[]{1, 2, 3, 4}));
-
-        Page page1 = new Page(1);
-        page1.addField(new buckley.TextField("field1", 0, 0, 0, 0));
-
-        buckley.TextField field = new buckley.TextField("field2", 0, 0, 0, 0, "Courier", 12.0f);
-        field.setAlignment(Alignment.RIGHT);
-        field.setBorder(new Border(1.0f, Color.black));
-        field.setBackgroundColor(Color.yellow);
-
-        page1.addField(field);
-        page1.addField(new buckley.TextField("field3", 0, 0, 0, 0));
-
-        doc.addPage(page1);
-
-        System.out.println(serializer.serialize(doc));
+    public Document read(InputStream input) {
+        return (Document) xstream.fromXML(input);
     }
 
 }

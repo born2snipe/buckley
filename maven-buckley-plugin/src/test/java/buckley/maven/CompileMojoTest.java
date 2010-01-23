@@ -14,9 +14,7 @@ package buckley.maven;
 
 import buckley.Document;
 import buckley.compile.Compiler;
-import buckley.io.XmlSerializer;
-import buckley.maven.CompilablePdf;
-import buckley.maven.CompileMojo;
+import buckley.io.XmlDocumentHandler;
 import junit.framework.TestCase;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -29,14 +27,14 @@ import static org.mockito.Mockito.*;
 
 public class CompileMojoTest extends TestCase {
     private Compiler compiler;
-    private XmlSerializer serializer;
+    private XmlDocumentHandler serializer;
     private ShuntCompileMojo mojo;
     private Log log;
 
     protected void setUp() throws Exception {
         super.setUp();
         compiler = mock(Compiler.class);
-        serializer = mock(XmlSerializer.class);
+        serializer = mock(XmlDocumentHandler.class);
         log = mock(Log.class);
 
         mojo = new ShuntCompileMojo(serializer, compiler);
@@ -50,18 +48,16 @@ public class CompileMojoTest extends TestCase {
         mojo.setCompilables(new CompilablePdf[]{compilable, compilable2});
 
         Document document = new Document();
-        when(serializer.deserialize(compilable.getXml())).thenReturn(document);
+        when(serializer.read(compilable.getXml())).thenReturn(document);
 
         Document document2 = new Document();
-        when(serializer.deserialize(compilable2.getXml())).thenReturn(document2);
+        when(serializer.read(compilable2.getXml())).thenReturn(document2);
 
         mojo.execute();
 
-        verify(serializer).deserialize(compilable.getXml());
         verify(compiler).compile(compilable.getPdfTemplate(), compilable.getCompiledPdf(), document);
         verify(log).info("Compiling template against xml output to compiled");
 
-        verify(serializer).deserialize(compilable2.getXml());
         verify(compiler).compile(compilable2.getPdfTemplate(), compilable2.getCompiledPdf(), document2);
         verify(log).info("Compiling template2 against xml2 output to compiled2");
     }
@@ -72,11 +68,10 @@ public class CompileMojoTest extends TestCase {
         mojo.setCompilables(new CompilablePdf[]{compilable});
 
         Document document = new Document();
-        when(serializer.deserialize(compilable.getXml())).thenReturn(document);
+        when(serializer.read(compilable.getXml())).thenReturn(document);
 
         mojo.execute();
 
-        verify(serializer).deserialize(compilable.getXml());
         verify(compiler).compile(compilable.getPdfTemplate(), compilable.getCompiledPdf(), document);
         verify(log).info("Compiling template against xml output to compiled");
     }
@@ -94,7 +89,7 @@ public class CompileMojoTest extends TestCase {
     private static class ShuntCompileMojo extends CompileMojo {
         private Compiler compiler;
 
-        private ShuntCompileMojo(XmlSerializer serializer, buckley.compile.Compiler compiler) {
+        private ShuntCompileMojo(XmlDocumentHandler serializer, buckley.compile.Compiler compiler) {
             super(serializer);
             this.compiler = compiler;
         }

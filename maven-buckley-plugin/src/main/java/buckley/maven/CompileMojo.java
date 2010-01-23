@@ -14,7 +14,7 @@ package buckley.maven;
 
 import buckley.Document;
 import buckley.compile.Compiler;
-import buckley.io.XmlSerializer;
+import buckley.io.XmlDocumentHandler;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -24,7 +24,7 @@ import org.apache.maven.plugin.MojoFailureException;
  */
 
 public class CompileMojo extends AbstractMojo {
-    private XmlSerializer serializer;
+    private XmlDocumentHandler serializer;
 
     /**
      * List of files to exclude. Specified as fileset patterns.
@@ -35,10 +35,10 @@ public class CompileMojo extends AbstractMojo {
     private CompilablePdf[] compilables;
 
     public CompileMojo() {
-        this(new XmlSerializer());
+        this(new XmlDocumentHandler());
     }
 
-    public CompileMojo(XmlSerializer serializer) {
+    public CompileMojo(XmlDocumentHandler serializer) {
         this.serializer = serializer;
     }
 
@@ -50,9 +50,13 @@ public class CompileMojo extends AbstractMojo {
 
         for (CompilablePdf pdf : compilables) {
             getLog().info("Compiling " + pdf.getPdfTemplate() + " against " + pdf.getXml() + " output to " + pdf.getCompiledPdf());
-            Document document = serializer.deserialize(pdf.getXml());
-            buckley.compile.Compiler compiler = initializeCompiler(document);
-            compiler.compile(pdf.getPdfTemplate(), pdf.getCompiledPdf(), document);
+            try {
+                Document document = serializer.read(pdf.getXml());
+                buckley.compile.Compiler compiler = initializeCompiler(document);
+                compiler.compile(pdf.getPdfTemplate(), pdf.getCompiledPdf(), document);
+            } catch (Exception err) {
+                throw new MojoExecutionException("A problem occurred while trying to compile template (" + pdf.getPdfTemplate() + ")", err);
+            }
         }
     }
 
