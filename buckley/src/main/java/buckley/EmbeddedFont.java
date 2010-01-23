@@ -12,6 +12,8 @@
  */
 package buckley;
 
+import java.util.Arrays;
+
 
 public class EmbeddedFont {
     private String name;
@@ -34,5 +36,27 @@ public class EmbeddedFont {
 
     public byte[] getContent() {
         return content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EmbeddedFont that = (EmbeddedFont) o;
+
+        if (!Arrays.equals(content, that.content)) return false;
+        if (encoding != null ? !encoding.equals(that.encoding) : that.encoding != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (encoding != null ? encoding.hashCode() : 0);
+        result = 31 * result + (content != null ? Arrays.hashCode(content) : 0);
+        return result;
     }
 }
