@@ -17,24 +17,26 @@ import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfFormField;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.RadioCheckField;
-import junit.framework.TestCase;
 import org.codeclub.buckley.CheckboxField;
 import org.codeclub.buckley.Pdf;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 
-public class CheckboxFieldAdderTest extends TestCase {
+public class CheckboxFieldAdderTest {
     private Pdf pdf;
     private FontRegistry fontRegistry;
     private ShuntCheckboxFieldAdder adder;
     private BaseFont font;
     private PdfWriter writer;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         pdf = mock(Pdf.class);
         fontRegistry = mock(FontRegistry.class);
         adder = new ShuntCheckboxFieldAdder(fontRegistry);
@@ -43,11 +45,12 @@ public class CheckboxFieldAdderTest extends TestCase {
         adder.field = mock(PdfFormField.class);
     }
 
+    @Test
     public void test() {
         assertTrue(true);
     }
 
-    public void FAILING_test_add() {
+    public void test_add() {
         CheckboxField field = new CheckboxField("name", "Off", 1, 2, 3, 4);
 
         adder.add(pdf, field, 100);

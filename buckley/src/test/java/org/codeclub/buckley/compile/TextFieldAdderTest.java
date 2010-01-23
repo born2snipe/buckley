@@ -16,27 +16,29 @@ import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfFormField;
 import com.lowagie.text.pdf.PdfWriter;
-import junit.framework.TestCase;
 import org.codeclub.buckley.Alignment;
 import org.codeclub.buckley.Border;
 import org.codeclub.buckley.Pdf;
 import org.codeclub.buckley.TextField;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.awt.*;
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 
-public class TextFieldAdderTest extends TestCase {
+public class TextFieldAdderTest {
     private Pdf pdf;
     private FontRegistry fontRegistry;
     private ShuntTextFieldAdder adder;
     private BaseFont font;
     private PdfWriter writer;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         pdf = mock(Pdf.class);
         fontRegistry = mock(FontRegistry.class);
         adder = new ShuntTextFieldAdder(fontRegistry);
@@ -45,6 +47,7 @@ public class TextFieldAdderTest extends TestCase {
         adder.field = mock(PdfFormField.class);
     }
 
+    @Test
     public void test_add_NoFont() throws DocumentException, IOException {
         TextField field = new TextField("name", 1, 2, 3, 4);
         field.setAlignment(Alignment.RIGHT);
@@ -60,7 +63,7 @@ public class TextFieldAdderTest extends TestCase {
         com.lowagie.text.pdf.TextField formField = adder.textField;
         assertEquals(field.getName(), formField.getFieldName());
         assertEquals(font, formField.getFont());
-        assertEquals(12.0f, formField.getFontSize());
+        assertEquals(12.0f, formField.getFontSize(), 0.0);
         assertEquals(field.getBackgroundColor(), formField.getBackgroundColor());
         assertEquals(field.getColor(), formField.getTextColor());
         assertEquals(field.getAlignment().getiTextCode(), formField.getAlignment());
@@ -68,6 +71,7 @@ public class TextFieldAdderTest extends TestCase {
         verify(writer).addAnnotation(adder.field);
     }
 
+    @Test
     public void test_add_SpecificFont() throws DocumentException, IOException {
         TextField field = new TextField("name", 1, 2, 3, 4, "Courier", 12.0f);
 
@@ -82,6 +86,7 @@ public class TextFieldAdderTest extends TestCase {
         verify(writer).addAnnotation(adder.field);
     }
 
+    @Test
     public void test_add_Border() {
         TextField field = new TextField("name", 1, 2, 3, 4, "Courier", 12.0f);
         field.setBorder(new Border(11.0f, Color.black));
@@ -93,8 +98,9 @@ public class TextFieldAdderTest extends TestCase {
 
         com.lowagie.text.pdf.TextField formField = adder.textField;
         assertEquals(field.getBorder().getColor(), formField.getBorderColor());
-        assertEquals(field.getBorder().getWidth(), formField.getBorderWidth());
+        assertEquals(field.getBorder().getWidth(), formField.getBorderWidth(), 0.0);
     }
+
 
     private static class ShuntTextFieldAdder extends TextFieldAdder {
         private PdfFormField field;

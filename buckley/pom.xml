@@ -30,7 +30,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.5</version>
             <scope>test</scope>
         </dependency>
 
@@ -53,7 +53,7 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>com.google.code.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>

@@ -12,53 +12,66 @@
  */
 package org.codeclub.buckley.io;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.awt.*;
 
+import static org.junit.Assert.*;
 
-public class ColorValueConverterTest extends TestCase {
+
+public class ColorValueConverterTest {
     private ColorValueConverter converter;
 
+    @Before
     public void setUp() {
         converter = new ColorValueConverter();
     }
 
+    @Test
     public void test_fromString_Null() {
         assertNull(converter.fromString(null));
     }
 
+    @Test
     public void test_fromString_WhiteSpace() {
         assertNull(converter.fromString("   "));
     }
 
+    @Test
     public void test_fromString_EmptyString() {
         assertNull(converter.fromString(""));
     }
 
+    @Test
     public void test_fromString_Blue() {
         assertEquals(Color.white, converter.fromString("ffffffff"));
     }
 
+    @Test
     public void test_fromString_Black() {
         assertEquals(Color.black, converter.fromString("FF000000"));
         assertEquals(Color.black, converter.fromString("000000"));
     }
 
+    @Test
     public void test_toString_null() {
         assertNull(converter.toString(null));
     }
 
+    @Test
     public void test_toString_blue() {
         Color color = Color.blue;
         assertEquals(Integer.toHexString(color.getRGB()), converter.toString(color));
     }
 
+    @Test
     public void test_toString_black() {
         Color color = Color.black;
         assertEquals(Integer.toHexString(color.getRGB()), converter.toString(color));
     }
 
+    @Test
     public void test_canConvert() {
         assertTrue(converter.canConvert(Color.class));
         assertFalse(converter.canConvert(String.class));

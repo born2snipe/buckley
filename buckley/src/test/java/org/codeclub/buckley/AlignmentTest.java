@@ -13,10 +13,13 @@
 package org.codeclub.buckley;
 
 import com.lowagie.text.Element;
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 
-public class AlignmentTest extends TestCase {
+public class AlignmentTest {
+    @Test
     public void test_iTextCode() {
         assertEquals(Element.ALIGN_CENTER, Alignment.CENTER.getiTextCode());
         assertEquals(Element.ALIGN_RIGHT, Alignment.RIGHT.getiTextCode());
