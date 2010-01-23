@@ -13,18 +13,13 @@
 package org.codeclub.buckley;
 
 import com.lowagie.text.Element;
+import junit.framework.TestCase;
 
 
-public enum Alignment {
-    LEFT(Element.ALIGN_LEFT), RIGHT(Element.ALIGN_RIGHT), CENTER(Element.ALIGN_CENTER);
-
-    private int iTextCode;
-
-    Alignment(int iTextCode) {
-        this.iTextCode = iTextCode;
-    }
-
-    public int getiTextCode() {
-        return iTextCode;
+public class AlignmentTest extends TestCase {
+    public void test_iTextCode() {
+        assertEquals(Element.ALIGN_CENTER, Alignment.CENTER.getiTextCode());
+        assertEquals(Element.ALIGN_RIGHT, Alignment.RIGHT.getiTextCode());
+        assertEquals(Element.ALIGN_LEFT, Alignment.LEFT.getiTextCode());
     }
 }

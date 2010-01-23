@@ -12,19 +12,24 @@
  */
 package org.codeclub.buckley;
 
-import com.lowagie.text.Element;
+import com.lowagie.text.pdf.PdfAnnotation;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public enum Alignment {
-    LEFT(Element.ALIGN_LEFT), RIGHT(Element.ALIGN_RIGHT), CENTER(Element.ALIGN_CENTER);
+public class StubPdf extends Pdf {
+    private List<PdfAnnotation> annotations = new ArrayList<PdfAnnotation>();
 
-    private int iTextCode;
-
-    Alignment(int iTextCode) {
-        this.iTextCode = iTextCode;
+    public StubPdf() throws FileNotFoundException {
+        super(new FileInputStream(new File("checkbox.pdf")), new ByteArrayOutputStream());
     }
 
-    public int getiTextCode() {
-        return iTextCode;
+    public List<PdfAnnotation> getAnnotations() {
+        return annotations;
     }
 }

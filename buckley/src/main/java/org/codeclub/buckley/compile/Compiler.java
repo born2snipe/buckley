@@ -27,13 +27,12 @@ public class Compiler {
 
     public Compiler(FontRegistry fontRegistry) {
         fieldAdders.put(TextField.class, new TextFieldAdder(fontRegistry));
-        fieldAdders.put(CheckboxField.class, new CheckboxFieldAdder());
+        fieldAdders.put(CheckboxField.class, new CheckboxFieldAdder(fontRegistry));
     }
 
     public void compile(InputStream pdfTemplate, OutputStream output, final org.codeclub.buckley.Document doc) {
-        Pdf pdf = null;
+        final Pdf pdf = new Pdf(pdfTemplate, output);
         try {
-            pdf = new Pdf(pdfTemplate, output);
             pdf.eachPage(new Pdf.PageHandler() {
                 public void handlePage(int number, PdfReader reader, PdfWriter writer, Document document, PdfAcroForm form) {
                     PdfContentByte content = writer.getDirectContent();
@@ -42,15 +41,14 @@ public class Compiler {
                     Page page = doc.getPage(number);
                     if (page != null) {
                         for (Field field : page.getFields()) {
-                            createFieldAdder(field).add(form, field, importedPage.getHeight());
+                            createFieldAdder(field).add(pdf, field, importedPage.getHeight());
                         }
                     }
                     document.newPage();
                 }
             });
         } finally {
-            if (pdf != null)
-                pdf.close();
+            pdf.close();
         }
     }
 

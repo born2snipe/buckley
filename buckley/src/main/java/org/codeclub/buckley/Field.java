@@ -21,10 +21,13 @@ public abstract class Field {
     private float y;
     private float width;
     private float height;
-    private Alignment alignment;
+    private Alignment alignment = Alignment.LEFT;
     private Border border;
-    private Color color;
-    private Color backgroundColor;
+    private Color color = Color.black;
+    private Color backgroundColor = null;
+    private String fontName;
+    private Float fontSize;
+
 
     protected Field(String name, float x, float y, float width, float height) {
         this.name = name;
@@ -32,6 +35,16 @@ public abstract class Field {
         this.y = y;
         this.height = height;
         this.width = width;
+    }
+
+    protected Field(String name, float x, float y, float width, float height, String fontName, Float fontSize) {
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.fontName = fontName;
+        this.fontSize = fontSize;
     }
 
     public Color getBackgroundColor() {
@@ -104,5 +117,13 @@ public abstract class Field {
 
     public void setHeight(float height) {
         this.height = height;
+    }
+
+    public String getFontName() {
+        return fontName;
+    }
+
+    public float getFontSize() {
+        return fontSize;
     }
 }

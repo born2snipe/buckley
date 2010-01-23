@@ -70,6 +70,14 @@ public class Pdf {
         }
     }
 
+    public PdfWriter getWriter() {
+        return writer;
+    }
+
+    public PdfAcroForm getAcroForm() {
+        return pdfAcroForm;
+    }
+
     public static interface PageHandler {
         void handlePage(int number, PdfReader reader, PdfWriter writer, Document document, PdfAcroForm form);
     }
