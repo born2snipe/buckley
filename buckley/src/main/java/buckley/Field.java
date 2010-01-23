@@ -21,10 +21,10 @@ public abstract class Field {
     private float y;
     private float width;
     private float height;
-    private Alignment alignment = Alignment.LEFT;
+    private Alignment alignment;
     private Border border;
-    private Color color = Color.black;
-    private Color backgroundColor = null;
+    private Color color;
+    private Color backgroundColor;
     private String fontName;
     private Float fontSize;
 

@@ -49,6 +49,24 @@ public class XmlDocumentHandler implements DocumentReader, DocumentWriter {
         xstream.toXML(document, output);
     }
 
+    public void write(File file, Document document) {
+        OutputStream output = null;
+        try {
+            output = new FileOutputStream(file);
+            write(output, document);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException e) {
+
+                }
+            }
+        }
+    }
+
     public Document read(File file) {
         InputStream input = null;
         try {

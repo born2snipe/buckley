@@ -8,7 +8,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>buckley</groupId>
+    <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-buckley-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Buckley Maven Plugin</name>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.5</version>
             <scope>test</scope>
         </dependency>
 

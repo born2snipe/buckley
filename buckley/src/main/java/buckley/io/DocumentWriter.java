@@ -14,9 +14,12 @@ package buckley.io;
 
 import buckley.Document;
 
+import java.io.File;
 import java.io.OutputStream;
 
 
 public interface DocumentWriter {
     void write(OutputStream output, Document document);
+
+    void write(File file, Document document);
 }
