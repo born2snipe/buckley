@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.codeclub</groupId>
+        <groupId>buckley</groupId>
         <artifactId>buckley-aggregate</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.codeclub</groupId>
+    <groupId>buckley</groupId>
     <artifactId>buckley</artifactId>
     <packaging>jar</packaging>
     <name>Buckley</name>

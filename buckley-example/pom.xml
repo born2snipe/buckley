@@ -3,13 +3,13 @@
 
     <parent>
         <artifactId>buckley-aggregate</artifactId>
-        <groupId>org.codeclub</groupId>
+        <groupId>buckley</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.codeclub</groupId>
+    <groupId>buckley</groupId>
     <artifactId>buckley-example</artifactId>
     <name>Buckley Examples</name>
 
@@ -23,7 +23,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.codeclub</groupId>
+            <groupId>buckley</groupId>
             <artifactId>buckley</artifactId>
             <version>${version}</version>
             <scope>test</scope>
