@@ -1,5 +1,5 @@
 /**
- * Copyright 2008-2009 the original author or authors.
+ * Copyright 2008-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
@@ -15,8 +15,9 @@ package org.codeclub.buckley;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 public class DocumentTest {
@@ -43,6 +44,33 @@ public class DocumentTest {
     @Test
     public void test_getPage_PageDoesNotExist() {
         assertEquals(null, doc.getPage(0));
+    }
+
+    @Test
+    public void test_hasFields_NoPages() {
+        assertFalse(doc.hasFields(1));
+    }
+
+    @Test
+    public void test_hasFields_PageWithNoFields() {
+        Page page = mock(Page.class);
+        when(page.getNumber()).thenReturn(1);
+        when(page.hasFields()).thenReturn(false);
+
+        doc.addPage(page);
+
+        assertFalse(doc.hasFields(1));
+    }
+
+    @Test
+    public void test_hasFields() {
+        Page page = mock(Page.class);
+        when(page.getNumber()).thenReturn(1);
+        when(page.hasFields()).thenReturn(true);
+
+        doc.addPage(page);
+
+        assertTrue(doc.hasFields(1));
     }
 
     @Before

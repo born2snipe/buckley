@@ -1,5 +1,5 @@
 /**
- * Copyright 2008-2009 the original author or authors.
+ * Copyright 2008-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
@@ -62,7 +62,7 @@ public class AllTextFieldTest extends TestCase {
         /**
          * Now we initialize the Compiler with the FontRegistry that was configured in our XML above.
          */
-        Compiler compiler = new Compiler(document.getFontRegistry());
+        Compiler compiler = new Compiler();
 
         /**
          * The file locations where our original pdf lives and where we want the compiled pdf to live.

@@ -1,5 +1,5 @@
 /**
- * Copyright 2008-2009 the original author or authors.
+ * Copyright 2008-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
@@ -12,10 +12,19 @@
  */
 package org.codeclub.buckley.compile;
 
+import com.lowagie.text.pdf.BaseField;
+import org.codeclub.buckley.Document;
 import org.codeclub.buckley.Field;
-import org.codeclub.buckley.Pdf;
+
+import java.awt.*;
 
 
-public interface FieldAdder<T extends Field> {
-    void add(Pdf pdf, T field, float documentHeight);
+public class ColorModifier implements FieldAttributeModifier {
+    public void modify(BaseField iTextField, Field field, Document document) {
+        Color color = Color.black;
+        if (field.getColor() != null) {
+            color = field.getColor();
+        }
+        iTextField.setTextColor(color);
+    }
 }

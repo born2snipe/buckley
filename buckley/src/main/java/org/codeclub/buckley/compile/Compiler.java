@@ -1,5 +1,5 @@
 /**
- * Copyright 2008-2009 the original author or authors.
+ * Copyright 2008-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
@@ -13,21 +13,32 @@
 package org.codeclub.buckley.compile;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.*;
 import org.codeclub.buckley.*;
 import org.codeclub.buckley.TextField;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class Compiler {
-    private Map<Class, FieldAdder> fieldAdders = new HashMap<Class, FieldAdder>();
+    private Map<Class, ITextFieldFactory<?>> fieldFactories = new HashMap<Class, ITextFieldFactory<?>>();
+    private List<FieldAttributeModifier> modifiers = new ArrayList<FieldAttributeModifier>();
+    private FieldSizeFactory fieldSizeFactory = new FieldSizeFactory();
 
-    public Compiler(FontRegistry fontRegistry) {
-        fieldAdders.put(TextField.class, new TextFieldAdder(fontRegistry));
-        fieldAdders.put(CheckboxField.class, new CheckboxFieldAdder(fontRegistry));
+    public Compiler() {
+        fieldFactories.put(TextField.class, new TextFieldFactory());
+        fieldFactories.put(CheckboxField.class, new CheckboxFieldFactory());
+
+        modifiers.add(new TextModifier());
+        modifiers.add(new BorderModifier());
+        modifiers.add(new BackgroundColorModifier());
+        modifiers.add(new ColorModifier());
+        modifiers.add(new AlignmentModifier());
     }
 
     public void compile(InputStream pdfTemplate, OutputStream output, final org.codeclub.buckley.Document doc) {
@@ -38,10 +49,20 @@ public class Compiler {
                     PdfContentByte content = writer.getDirectContent();
                     PdfImportedPage importedPage = writer.getImportedPage(reader, number);
                     content.addTemplate(importedPage, 0.0f, 0.0f);
-                    Page page = doc.getPage(number);
-                    if (page != null) {
+                    if (doc.hasFields(number)) {
+                        Page page = doc.getPage(number);
                         for (Field field : page.getFields()) {
-                            createFieldAdder(field).add(pdf, field, importedPage.getHeight());
+                            Rectangle fieldSize = fieldSizeFactory.build(field, importedPage.getHeight());
+                            ITextFieldFactory factory = fieldFactories.get(field.getClass());
+                            BaseField iTextField = factory.build(writer, fieldSize, field.getName());
+                            for (FieldAttributeModifier modifier : modifiers) {
+                                modifier.modify(iTextField, field, doc);
+                            }
+                            try {
+                                writer.addAnnotation(factory.buildFormField(iTextField));
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     }
                     document.newPage();
@@ -59,10 +80,6 @@ public class Compiler {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private FieldAdder createFieldAdder(Field field) {
-        return fieldAdders.get(field.getClass());
     }
 
 }

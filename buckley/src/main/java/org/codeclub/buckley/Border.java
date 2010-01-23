@@ -1,5 +1,5 @@
 /**
- * Copyright 2008-2009 the original author or authors.
+ * Copyright 2008-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
@@ -16,7 +16,7 @@ import java.awt.*;
 
 
 public class Border {
-    private float width;
+    private Float width;
     private Color color;
 
     public Border(float width, Color color) {
@@ -27,11 +27,11 @@ public class Border {
     public Border() {
     }
 
-    public float getWidth() {
+    public Float getWidth() {
         return width;
     }
 
-    public void setWidth(float width) {
+    public void setWidth(Float width) {
         this.width = width;
     }
 

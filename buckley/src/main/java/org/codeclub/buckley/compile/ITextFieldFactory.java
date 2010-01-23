@@ -10,16 +10,19 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package org.codeclub.buckley;
+package org.codeclub.buckley.compile;
+
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.BaseField;
+import com.lowagie.text.pdf.PdfFormField;
+import com.lowagie.text.pdf.PdfWriter;
+
+import java.io.IOException;
 
 
-public class TextField extends Field {
+public interface ITextFieldFactory<F extends BaseField> {
+    F build(PdfWriter writer, Rectangle size, String name);
 
-    public TextField(String name, int x, int y, int width, int height) {
-        super(name, x, y, width, height);
-    }
-
-    public TextField(String name, float x, float y, float width, float height, String fontName, Float fontSize) {
-        super(name, x, y, width, height, fontName, fontSize);
-    }
+    PdfFormField buildFormField(F field) throws IOException, DocumentException;
 }

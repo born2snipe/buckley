@@ -1,5 +1,5 @@
 /**
- * Copyright 2008-2009 the original author or authors.
+ * Copyright 2008-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
@@ -14,24 +14,19 @@ package org.codeclub.buckley.compile;
 
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.BaseField;
 import com.lowagie.text.pdf.PdfFormField;
 import com.lowagie.text.pdf.PdfWriter;
-import org.codeclub.buckley.TextField;
+import com.lowagie.text.pdf.TextField;
 
 import java.io.IOException;
 
 
-public class TextFieldAdder extends AbstractFieldAdder<TextField, com.lowagie.text.pdf.TextField> {
-    protected TextFieldAdder(FontRegistry fontRegistry) {
-        super(fontRegistry);
+public class TextFieldFactory implements ITextFieldFactory<com.lowagie.text.pdf.TextField> {
+    public com.lowagie.text.pdf.TextField build(PdfWriter writer, Rectangle size, String name) {
+        return new com.lowagie.text.pdf.TextField(writer, size, name);
     }
 
-    protected BaseField createField(PdfWriter writer, Rectangle rectangle, String name) {
-        return new com.lowagie.text.pdf.TextField(writer, rectangle, name);
-    }
-
-    protected PdfFormField createFormField(com.lowagie.text.pdf.TextField field) throws DocumentException, IOException {
+    public PdfFormField buildFormField(TextField field) throws IOException, DocumentException {
         return field.getTextField();
     }
 }

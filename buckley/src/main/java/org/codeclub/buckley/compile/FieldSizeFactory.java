@@ -10,16 +10,16 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package org.codeclub.buckley;
+package org.codeclub.buckley.compile;
+
+import com.lowagie.text.Rectangle;
+import org.codeclub.buckley.Field;
 
 
-public class TextField extends Field {
-
-    public TextField(String name, int x, int y, int width, int height) {
-        super(name, x, y, width, height);
-    }
-
-    public TextField(String name, float x, float y, float width, float height, String fontName, Float fontSize) {
-        super(name, x, y, width, height, fontName, fontSize);
+public class FieldSizeFactory {
+    public Rectangle build(Field field, float documentHeight) {
+        float xOffset = field.getX() + field.getWidth();
+        float yOffset = documentHeight - (field.getY() + field.getHeight());
+        return new Rectangle(field.getX(), yOffset, xOffset, documentHeight - field.getY());
     }
 }
