@@ -29,24 +29,6 @@ public abstract class Field {
     private Float fontSize;
 
 
-    protected Field(String name, float x, float y, float width, float height) {
-        this.name = name;
-        this.x = x;
-        this.y = y;
-        this.height = height;
-        this.width = width;
-    }
-
-    protected Field(String name, float x, float y, float width, float height, String fontName, Float fontSize) {
-        this.name = name;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.fontName = fontName;
-        this.fontSize = fontSize;
-    }
-
     public Color getBackgroundColor() {
         return backgroundColor;
     }
@@ -125,5 +107,13 @@ public abstract class Field {
 
     public Float getFontSize() {
         return fontSize;
+    }
+
+    public void setFontName(String fontName) {
+        this.fontName = fontName;
+    }
+
+    public void setFontSize(Float fontSize) {
+        this.fontSize = fontSize;
     }
 }

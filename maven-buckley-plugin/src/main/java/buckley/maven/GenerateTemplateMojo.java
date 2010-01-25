@@ -51,11 +51,32 @@ public class GenerateTemplateMojo extends AbstractMojo {
         Document document = new Document();
 
         Page pageOne = new Page(1);
-        pageOne.addField(new TextField("field1", 10, 10, 100, 20));
-        pageOne.addField(new CheckboxField("field1", null, 10, 10, 100, 20));
+        pageOne.addField(text());
+        pageOne.addField(checkbox());
 
         document.addPage(pageOne);
 
         writer.write(new File(filename), document);
+    }
+
+    private TextField text() {
+        TextField field = new TextField();
+        field.setName("field1");
+        field.setX(10.0f);
+        field.setY(10.0f);
+        field.setWidth(100.0f);
+        field.setHeight(20.0f);
+        return field;
+    }
+
+    private CheckboxField checkbox() {
+        CheckboxField field = new CheckboxField();
+        field.setName("field2");
+        field.setValue("on");
+        field.setX(10.0f);
+        field.setY(50.0f);
+        field.setWidth(100.0f);
+        field.setHeight(20.0f);
+        return field;
     }
 }

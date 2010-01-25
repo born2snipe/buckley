@@ -15,11 +15,4 @@ package buckley;
 
 public class TextField extends Field {
 
-    public TextField(String name, int x, int y, int width, int height) {
-        super(name, x, y, width, height);
-    }
-
-    public TextField(String name, float x, float y, float width, float height, String fontName, Float fontSize) {
-        super(name, x, y, width, height, fontName, fontSize);
-    }
 }

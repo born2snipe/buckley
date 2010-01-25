@@ -47,7 +47,7 @@ public class PageTest {
     @Test
     public void test_hasFields_HasAField() {
         Page page = new Page(1);
-        page.addField(new TextField("", 0, 0, 0, 0));
+        page.addField(new TextField());
         assertTrue(page.hasFields());
     }
 }
