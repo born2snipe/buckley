@@ -52,7 +52,7 @@ public class Compiler {
                     if (doc.hasFields(number)) {
                         Page page = doc.getPage(number);
                         for (Field field : page.getFields()) {
-                            Rectangle fieldSize = fieldSizeFactory.build(field, importedPage.getHeight());
+                            Rectangle fieldSize = fieldSizeFactory.build(field);
                             ITextFieldFactory factory = fieldFactories.get(field.getClass());
                             BaseField iTextField = factory.build(writer, fieldSize, field.getName());
                             for (FieldAttributeModifier modifier : modifiers) {

@@ -33,12 +33,12 @@ public class FieldSizeFactoryTest {
         when(field.getY()).thenReturn(2.0f);
         when(field.getHeight()).thenReturn(200.0f);
 
-        Rectangle rectangle = factory.build(field, 100.0f);
+        Rectangle rectangle = factory.build(field);
 
         assertNotNull(rectangle);
         assertEquals(1.0f, rectangle.getLeft(), 0.0);
         assertEquals(101.0f, rectangle.getRight(), 0.0);
-        assertEquals(98.0, rectangle.getTop(), 0.0);
-        assertEquals(-102.0, rectangle.getBottom(), 0.0);
+        assertEquals(202.0, rectangle.getTop(), 0.0);
+        assertEquals(2.0f, rectangle.getBottom(), 0.0);
     }
 }

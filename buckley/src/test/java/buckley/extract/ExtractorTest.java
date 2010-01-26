@@ -61,22 +61,6 @@ public class ExtractorTest {
     }
 
     @Test
-    public void x() {
-        Extractor extractor = new Extractor();
-
-        Document document = extractor.extract(Thread.currentThread().getContextClassLoader().getResourceAsStream("checkbox.pdf"));
-
-        assertNotNull(document);
-
-        Page page = document.getPage(1);
-        List<Field> fields = page.getFields();
-        for (Field field : fields) {
-            System.out.println(field.getName());
-        }
-        assertEquals(1, fields.size());
-    }
-
-    @Test
     public void test_noFormOnPdf() {
         when(pdfReader.getAcroFields()).thenReturn(null);
 
@@ -93,6 +77,7 @@ public class ExtractorTest {
         fieldNames.put("field-1", null);
         fieldNames.put("field-2", null);
 
+        when(acroFields.getFieldType("field-2")).thenReturn(AcroFields.FIELD_TYPE_TEXT);
         when(fieldFactory.build(AcroFields.FIELD_TYPE_TEXT)).thenReturn(field);
         when(acroFields.getFieldPositions("field-1")).thenReturn(new float[]{1.0f});
         when(acroFields.getFieldPositions("field-2")).thenReturn(new float[]{3.0f});
@@ -109,6 +94,7 @@ public class ExtractorTest {
         fieldNames.put("field-1", null);
         fieldNames.put("field-2", null);
 
+        when(acroFields.getFieldType("field-2")).thenReturn(AcroFields.FIELD_TYPE_TEXT);
         when(fieldFactory.build(AcroFields.FIELD_TYPE_TEXT)).thenReturn(field);
         when(acroFields.getFieldPositions("field-1")).thenReturn(new float[]{1.0f});
         when(acroFields.getFieldPositions("field-2")).thenReturn(new float[]{1.0f});
@@ -140,6 +126,7 @@ public class ExtractorTest {
         List<Field> fields = page.getFields();
         assertEquals(1, fields.size());
         verify(fieldExtractor).extract(field, "field-1", acroFields);
+        verify(field).setName("field-1");
     }
 
     @Test

@@ -17,9 +17,8 @@ import com.lowagie.text.Rectangle;
 
 
 public class FieldSizeFactory {
-    public Rectangle build(Field field, float documentHeight) {
+    public Rectangle build(Field field) {
         float xOffset = field.getX() + field.getWidth();
-        float yOffset = documentHeight - (field.getY() + field.getHeight());
-        return new Rectangle(field.getX(), yOffset, xOffset, documentHeight - field.getY());
+        return new Rectangle(field.getX(), field.getY(), xOffset, field.getY() + field.getHeight());
     }
 }

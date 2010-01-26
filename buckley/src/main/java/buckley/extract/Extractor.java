@@ -31,6 +31,7 @@ public class Extractor {
 
     public Extractor() {
         this(new PdfReaderFactory(), new FieldFactory());
+        addFieldExtractor(new LocationAndSizeExtractor());
     }
 
     protected Extractor(PdfReaderFactory pdfReaderFactory, FieldFactory fieldFactory) {
@@ -77,6 +78,7 @@ public class Extractor {
             }
 
             Field field = fieldFactory.build(acroFields.getFieldType(fieldName));
+            field.setName(fieldName);
             for (ITextFieldExtractor fieldExtractor : fieldExtractors) {
                 if (fieldExtractor.canExtract(field)) {
                     fieldExtractor.extract(field, fieldName, acroFields);
