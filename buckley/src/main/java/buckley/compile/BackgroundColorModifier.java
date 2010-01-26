@@ -18,6 +18,10 @@ import com.lowagie.text.pdf.BaseField;
 
 
 public class BackgroundColorModifier implements FieldAttributeModifier {
+    public boolean canModify(Field field) {
+        return true;
+    }
+
     public void modify(BaseField iTextField, Field field, Document document) {
         if (field.getBackgroundColor() != null) {
             iTextField.setBackgroundColor(field.getBackgroundColor());

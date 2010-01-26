@@ -58,6 +58,7 @@ public class ExtractorTest {
         when(pdfReader.getAcroFields()).thenReturn(acroFields);
         when(acroFields.getFields()).thenReturn(fieldNames);
         when(acroFields.getFieldType("field-1")).thenReturn(AcroFields.FIELD_TYPE_TEXT);
+        when(field.getName()).thenReturn("field-1");
     }
 
     @Test

@@ -13,12 +13,17 @@
 package buckley.compile;
 
 import buckley.Document;
+import buckley.Field;
 import buckley.TextField;
 import com.lowagie.text.pdf.BaseField;
 import com.lowagie.text.pdf.BaseFont;
 
 
 public class TextModifier implements FieldAttributeModifier<TextField> {
+    public boolean canModify(Field field) {
+        return field instanceof TextField;
+    }
+
     public void modify(BaseField iTextField, TextField field, Document document) {
         FontRegistry fontRegistry = document.getFontRegistry();
 

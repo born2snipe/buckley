@@ -19,6 +19,10 @@ import com.lowagie.text.pdf.BaseField;
 
 
 public class AlignmentModifier implements FieldAttributeModifier {
+    public boolean canModify(Field field) {
+        return true;
+    }
+
     public void modify(BaseField iTextField, Field field, Document document) {
         Alignment alignment = Alignment.LEFT;
         if (field.getAlignment() != null) {

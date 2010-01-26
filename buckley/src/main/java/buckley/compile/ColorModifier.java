@@ -20,6 +20,10 @@ import java.awt.*;
 
 
 public class ColorModifier implements FieldAttributeModifier {
+    public boolean canModify(Field field) {
+        return true;
+    }
+
     public void modify(BaseField iTextField, Field field, Document document) {
         Color color = Color.black;
         if (field.getColor() != null) {

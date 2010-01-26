@@ -21,6 +21,10 @@ import java.awt.*;
 
 
 public class BorderModifier implements FieldAttributeModifier {
+    public boolean canModify(Field field) {
+        return true;
+    }
+
     public void modify(BaseField iTextField, Field field, Document document) {
         Border border = field.getBorder();
         if (border == null) return;

@@ -49,6 +49,7 @@ public class AllTextFieldTest extends TestCase {
                 "        <textField name=\"city\" x=\"85.0\" y=\"125.0\" width=\"125.0\" height=\"15.0\"/>\n" +
                 "        <textField name=\"state\" x=\"265.0\" y=\"125.0\" width=\"20.0\" height=\"15.0\"/>\n" +
                 "        <textField name=\"zip\" x=\"327.0\" y=\"125.0\" width=\"60.0\" height=\"15.0\"/>\n" +
+                "        <checkboxField name=\"employed\" x='10' y='10' width='100' height='200' value='on' />" +
                 "      </fields>\n" +
                 "    </page>\n" +
                 "  </pages>\n" +

@@ -18,5 +18,7 @@ import com.lowagie.text.pdf.BaseField;
 
 
 public interface FieldAttributeModifier<T extends Field> {
+    boolean canModify(Field field);
+
     void modify(BaseField iTextField, T field, Document document);
 }

@@ -71,14 +71,15 @@ public class Extractor {
             float[] positions = acroFields.getFieldPositions(fieldName);
             int pageNumber = (int) positions[0];
 
+            Field field = fieldFactory.build(acroFields.getFieldType(fieldName));
+            field.setName(fieldName);
+
             Page page = document.getPage(pageNumber);
             if (page == null) {
                 page = new Page(pageNumber);
                 document.addPage(page);
             }
 
-            Field field = fieldFactory.build(acroFields.getFieldType(fieldName));
-            field.setName(fieldName);
             for (ITextFieldExtractor fieldExtractor : fieldExtractors) {
                 if (fieldExtractor.canExtract(field)) {
                     fieldExtractor.extract(field, fieldName, acroFields);

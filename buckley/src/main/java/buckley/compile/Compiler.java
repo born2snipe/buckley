@@ -56,7 +56,9 @@ public class Compiler {
                             ITextFieldFactory factory = fieldFactories.get(field.getClass());
                             BaseField iTextField = factory.build(writer, fieldSize, field.getName());
                             for (FieldAttributeModifier modifier : modifiers) {
-                                modifier.modify(iTextField, field, doc);
+                                if (modifier.canModify(field)) {
+                                    modifier.modify(iTextField, field, doc);
+                                }
                             }
                             try {
                                 writer.addAnnotation(factory.buildFormField(iTextField));
