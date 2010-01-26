@@ -14,10 +14,26 @@ package buckley;
 
 import org.junit.Test;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.*;
 
 
 public class PageTest {
+    @Test
+    public void test_fieldsSortedByName() {
+        Field field1 = new TextField();
+        field1.setName("field-1");
+
+        Field field2 = new TextField();
+        field2.setName("field-2");
+
+        Page page = new Page(1);
+        page.addField(field2);
+        page.addField(field1);
+
+        assertEquals(asList(field1, field2), page.getFields());
+    }
+
     @Test
     public void test_constructor_Negative() {
         try {

@@ -14,6 +14,7 @@ package buckley;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -28,6 +29,11 @@ public class Page {
 
     public void addField(Field field) {
         fields.add(field);
+        Collections.sort(fields, new Comparator<Field>() {
+            public int compare(Field o1, Field o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
     }
 
     public List<Field> getFields() {
