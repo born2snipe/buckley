@@ -1,11 +1,11 @@
 /**
  * Copyright 2008-2010 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at:
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
@@ -25,9 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class ExtractorTest {
@@ -39,6 +37,28 @@ public class ExtractorTest {
     private HashMap fieldNames;
     private FieldFactory fieldFactory;
     private Field field;
+    private ITextFieldExtractor fieldExtractor;
+
+    @Before
+    public void setUp() throws Exception {
+        pdfReaderFactory = mock(PdfReaderFactory.class);
+        pdfReader = mock(PdfReader.class);
+        acroFields = mock(AcroFields.class);
+        fieldFactory = mock(FieldFactory.class);
+        field = mock(Field.class);
+        fieldExtractor = mock(ITextFieldExtractor.class);
+
+        extractor = new Extractor(pdfReaderFactory, fieldFactory);
+        extractor.addFieldExtractor(fieldExtractor);
+
+        input = new ByteArrayInputStream(new byte[0]);
+        fieldNames = new HashMap();
+
+        when(pdfReaderFactory.build(input)).thenReturn(pdfReader);
+        when(pdfReader.getAcroFields()).thenReturn(acroFields);
+        when(acroFields.getFields()).thenReturn(fieldNames);
+        when(acroFields.getFieldType("field-1")).thenReturn(AcroFields.FIELD_TYPE_TEXT);
+    }
 
     @Test
     public void x() {
@@ -57,6 +77,18 @@ public class ExtractorTest {
     }
 
     @Test
+    public void test_noFormOnPdf() {
+        when(pdfReader.getAcroFields()).thenReturn(null);
+
+        try {
+            extractor.extract(input);
+            fail();
+        } catch (IllegalStateException err) {
+            assertEquals("No form found on pdf", err.getMessage());
+        }
+    }
+
+    @Test
     public void test_multipleFields_OnDifferentPages() {
         fieldNames.put("field-1", null);
         fieldNames.put("field-2", null);
@@ -71,7 +103,7 @@ public class ExtractorTest {
         assertEquals(1, document.getPage(1).getFields().size());
         assertEquals(1, document.getPage(3).getFields().size());
     }
-    
+
     @Test
     public void test_multipleFields_OnSamePage() {
         fieldNames.put("field-1", null);
@@ -96,6 +128,7 @@ public class ExtractorTest {
 
         when(fieldFactory.build(AcroFields.FIELD_TYPE_TEXT)).thenReturn(field);
         when(acroFields.getFieldPositions("field-1")).thenReturn(new float[]{1.0f});
+        when(fieldExtractor.canExtract(field)).thenReturn(true);
 
         Document document = extractor.extract(input);
 
@@ -106,23 +139,53 @@ public class ExtractorTest {
 
         List<Field> fields = page.getFields();
         assertEquals(1, fields.size());
+        verify(fieldExtractor).extract(field, "field-1", acroFields);
     }
 
-    @Before
-    public void setUp() throws Exception {
-        pdfReaderFactory = mock(PdfReaderFactory.class);
-        pdfReader = mock(PdfReader.class);
-        acroFields = mock(AcroFields.class);
-        fieldFactory = mock(FieldFactory.class);
-        field = mock(Field.class);
+    @Test
+    public void test_singleField_FieldExtractorDoesNotSupportField() {
+        fieldNames.put("field-1", null);
 
-        extractor = new Extractor(pdfReaderFactory, fieldFactory);
+        when(fieldFactory.build(AcroFields.FIELD_TYPE_TEXT)).thenReturn(field);
+        when(acroFields.getFieldPositions("field-1")).thenReturn(new float[]{1.0f});
+        when(fieldExtractor.canExtract(field)).thenReturn(false);
 
-        input = new ByteArrayInputStream(new byte[0]);
-        fieldNames = new HashMap();
+        Document document = extractor.extract(input);
 
-        when(pdfReaderFactory.build(input)).thenReturn(pdfReader);
-        when(pdfReader.getAcroFields()).thenReturn(acroFields);
-        when(acroFields.getFields()).thenReturn(fieldNames);
+        assertNotNull(document);
+        assertEquals(1, document.getPages().size());
+        Page page = document.getPage(1);
+        assertNotNull(page);
+
+        List<Field> fields = page.getFields();
+        assertEquals(1, fields.size());
+        verify(fieldExtractor, never()).extract(field, "field-1", acroFields);
+    }
+
+    @Test
+    public void test_singleField_MultipleFieldExtractors() {
+        ITextFieldExtractor fieldExtractor2 = mock(ITextFieldExtractor.class);
+        extractor.addFieldExtractor(fieldExtractor2);
+
+        fieldNames.put("field-1", null);
+
+        when(fieldFactory.build(AcroFields.FIELD_TYPE_TEXT)).thenReturn(field);
+        when(acroFields.getFieldPositions("field-1")).thenReturn(new float[]{1.0f});
+        when(fieldExtractor.canExtract(field)).thenReturn(true);
+        when(fieldExtractor2.canExtract(field)).thenReturn(true);
+
+        Document document = extractor.extract(input);
+
+        assertNotNull(document);
+        assertEquals(1, document.getPages().size());
+        Page page = document.getPage(1);
+        assertNotNull(page);
+
+        List<Field> fields = page.getFields();
+        assertEquals(1, fields.size());
+        verify(fieldExtractor).extract(field, "field-1", acroFields);
+        verify(fieldExtractor2).extract(field, "field-1", acroFields);
     }
 }
+
+

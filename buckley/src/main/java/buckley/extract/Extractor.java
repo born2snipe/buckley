@@ -19,12 +19,15 @@ import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class Extractor {
     private PdfReaderFactory pdfReaderFactory;
     private FieldFactory fieldFactory;
+    private List<ITextFieldExtractor> fieldExtractors = new ArrayList<ITextFieldExtractor>();
 
     public Extractor() {
         this(new PdfReaderFactory(), new FieldFactory());
@@ -58,6 +61,7 @@ public class Extractor {
         PdfReader pdfReader = pdfReaderFactory.build(input);
 
         AcroFields acroFields = pdfReader.getAcroFields();
+        if (acroFields == null) throw new IllegalStateException("No form found on pdf");
         HashMap fields = acroFields.getFields();
 
         for (Object key : fields.keySet()) {
@@ -73,9 +77,18 @@ public class Extractor {
             }
 
             Field field = fieldFactory.build(acroFields.getFieldType(fieldName));
+            for (ITextFieldExtractor fieldExtractor : fieldExtractors) {
+                if (fieldExtractor.canExtract(field)) {
+                    fieldExtractor.extract(field, fieldName, acroFields);
+                }
+            }
             page.addField(field);
         }
 
         return document;
+    }
+
+    public void addFieldExtractor(ITextFieldExtractor fieldExtractor) {
+        fieldExtractors.add(fieldExtractor);
     }
 }
