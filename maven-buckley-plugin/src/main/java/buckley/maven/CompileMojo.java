@@ -12,59 +12,55 @@
  */
 package buckley.maven;
 
-import buckley.Document;
 import buckley.compile.Compiler;
 import buckley.io.XmlDocumentHandler;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
+import java.io.File;
+
 /**
  * @goal compile
+ * @requiresProject false
  */
 
 public class CompileMojo extends AbstractMojo {
     private XmlDocumentHandler serializer;
+    private Compiler compiler;
+
 
     /**
-     * List of files to exclude. Specified as fileset patterns.
-     *
      * @required
-     * @parameter
+     * @parameter expression="${pdfTemplate}"
      */
-    private CompilablePdf[] compilables;
+    private File pdfTemplate;
+
+    /**
+     * @required
+     * @parameter expression="${buckleyXml}"
+     */
+    private File buckleyXml;
 
     public CompileMojo() {
-        this(new XmlDocumentHandler());
+        this(new XmlDocumentHandler(), new Compiler());
     }
 
-    public CompileMojo(XmlDocumentHandler serializer) {
+    protected CompileMojo(XmlDocumentHandler serializer, Compiler compiler) {
         this.serializer = serializer;
+        this.compiler = compiler;
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        if (compilables.length == 0) {
-            getLog().info("No pdf compilables given");
-            return;
-        }
-
-        for (CompilablePdf pdf : compilables) {
-            getLog().info("Compiling " + pdf.getPdfTemplate() + " against " + pdf.getXml() + " output to " + pdf.getCompiledPdf());
-            try {
-                Document document = serializer.read(pdf.getXml());
-                buckley.compile.Compiler compiler = initializeCompiler(document);
-                compiler.compile(pdf.getPdfTemplate(), pdf.getCompiledPdf(), document);
-            } catch (Exception err) {
-                throw new MojoExecutionException("A problem occurred while trying to compile template (" + pdf.getPdfTemplate() + ")", err);
-            }
-        }
+        File compiledPdf = new File(pdfTemplate.getName().replaceAll("(.+)\\.(.+)", "$1_compiled.$2"));
+        compiler.compile(pdfTemplate, compiledPdf, serializer.read(buckleyXml));
     }
 
-    protected Compiler initializeCompiler(Document document) {
-        return new Compiler();
+    protected void setPdfTemplate(File pdfTemplate) {
+        this.pdfTemplate = pdfTemplate;
     }
 
-    public void setCompilables(CompilablePdf[] compilables) {
-        this.compilables = compilables;
+    protected void setBuckleyFile(File buckleyXml) {
+        this.buckleyXml = buckleyXml;
     }
 }

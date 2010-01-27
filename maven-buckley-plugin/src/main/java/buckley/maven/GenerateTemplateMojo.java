@@ -26,6 +26,7 @@ import java.io.File;
 
 /**
  * @goal generate-template
+ * @requiresProject false
  */
 public class GenerateTemplateMojo extends AbstractMojo {
     private DocumentWriter writer;

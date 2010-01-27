@@ -23,6 +23,7 @@ import java.io.File;
 
 /**
  * @goal extract
+ * @requiresProject false
  */
 public class ExtractMojo extends AbstractMojo {
     private Extractor extractor;

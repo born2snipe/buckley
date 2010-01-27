@@ -26,6 +26,7 @@ import java.io.File;
 
 /**
  * @goal embed-font
+ * @requiresProject false
  */
 public class EmbedFontMojo extends AbstractMojo {
     /**
