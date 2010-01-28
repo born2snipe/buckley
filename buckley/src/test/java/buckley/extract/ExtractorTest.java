@@ -38,6 +38,7 @@ public class ExtractorTest {
     private FieldFactory fieldFactory;
     private Field field;
     private ITextFieldExtractor fieldExtractor;
+    private PageNumberEvaluator pageNumberEvaluator;
 
     @Before
     public void setUp() throws Exception {
@@ -47,8 +48,9 @@ public class ExtractorTest {
         fieldFactory = mock(FieldFactory.class);
         field = mock(Field.class);
         fieldExtractor = mock(ITextFieldExtractor.class);
+        pageNumberEvaluator = mock(PageNumberEvaluator.class);
 
-        extractor = new Extractor(pdfReaderFactory, fieldFactory);
+        extractor = new Extractor(pdfReaderFactory, fieldFactory, pageNumberEvaluator);
         extractor.addFieldExtractor(fieldExtractor);
 
         input = new ByteArrayInputStream(new byte[0]);
@@ -59,6 +61,7 @@ public class ExtractorTest {
         when(acroFields.getFields()).thenReturn(fieldNames);
         when(acroFields.getFieldType("field-1")).thenReturn(AcroFields.FIELD_TYPE_TEXT);
         when(field.getName()).thenReturn("field-1");
+        when(pageNumberEvaluator.getPages(isA(float[].class))).thenReturn(new int[]{1});
     }
 
     @Test
@@ -75,6 +78,8 @@ public class ExtractorTest {
 
     @Test
     public void test_multipleFields_OnDifferentPages() {
+        when(pageNumberEvaluator.getPages(isA(float[].class))).thenReturn(new int[]{1}).thenReturn(new int[]{3});
+
         fieldNames.put("field-1", null);
         fieldNames.put("field-2", null);
 
@@ -110,6 +115,29 @@ public class ExtractorTest {
     }
 
     @Test
+    public void test_sameFieldIsOnMultiplePages() {
+        when(pageNumberEvaluator.getPages(isA(float[].class))).thenReturn(new int[]{1, 2});
+
+        fieldNames.put("field-1", null);
+
+        when(fieldFactory.build(AcroFields.FIELD_TYPE_TEXT)).thenReturn(field);
+        when(acroFields.getFieldPositions("field-1")).thenReturn(new float[]{1.0f});
+        when(fieldExtractor.canExtract(field)).thenReturn(true);
+
+        Document document = extractor.extract(input);
+
+        assertNotNull(document);
+        assertEquals(2, document.getPages().size());
+        Page page = document.getPage(1);
+        assertNotNull(page);
+
+        List<Field> fields = page.getFields();
+        assertEquals(1, fields.size());
+        verify(fieldExtractor).extract(0, field, "field-1", acroFields);
+        verify(fieldExtractor).extract(1, field, "field-1", acroFields);
+    }
+
+    @Test
     public void test_singleField() {
         fieldNames.put("field-1", null);
 
@@ -126,7 +154,7 @@ public class ExtractorTest {
 
         List<Field> fields = page.getFields();
         assertEquals(1, fields.size());
-        verify(fieldExtractor).extract(field, "field-1", acroFields);
+        verify(fieldExtractor).extract(0, field, "field-1", acroFields);
         verify(field).setName("field-1");
     }
 
@@ -147,7 +175,7 @@ public class ExtractorTest {
 
         List<Field> fields = page.getFields();
         assertEquals(1, fields.size());
-        verify(fieldExtractor, never()).extract(field, "field-1", acroFields);
+        verify(fieldExtractor, never()).extract(0, field, "field-1", acroFields);
     }
 
     @Test
@@ -171,8 +199,8 @@ public class ExtractorTest {
 
         List<Field> fields = page.getFields();
         assertEquals(1, fields.size());
-        verify(fieldExtractor).extract(field, "field-1", acroFields);
-        verify(fieldExtractor2).extract(field, "field-1", acroFields);
+        verify(fieldExtractor).extract(0, field, "field-1", acroFields);
+        verify(fieldExtractor2).extract(0, field, "field-1", acroFields);
     }
 }
 

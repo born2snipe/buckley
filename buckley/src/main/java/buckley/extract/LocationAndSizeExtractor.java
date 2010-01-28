@@ -21,12 +21,12 @@ public class LocationAndSizeExtractor implements ITextFieldExtractor {
         return true;
     }
 
-    public void extract(Field field, String fieldName, AcroFields fields) {
+    public void extract(int sameFieldNameCount, Field field, String fieldName, AcroFields fields) {
         float[] positions = fields.getFieldPositions(fieldName);
-
-        field.setX(positions[1]);
-        field.setY(positions[3]);
-        field.setWidth(positions[3] - positions[1]);
-        field.setHeight(positions[4] - positions[2]);
+        int offset = sameFieldNameCount * 5;
+        field.setX(positions[1 + offset]);
+        field.setY(positions[3 + offset]);
+        field.setWidth(positions[3 + offset] - positions[1 + offset]);
+        field.setHeight(positions[4 + offset] - positions[2 + offset]);
     }
 }

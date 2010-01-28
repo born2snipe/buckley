@@ -12,12 +12,18 @@
  */
 package buckley.extract;
 
-import buckley.Field;
-import com.lowagie.text.pdf.AcroFields;
+import org.junit.Test;
+
+import java.util.Arrays;
+
+import static org.junit.Assert.assertTrue;
 
 
-public interface ITextFieldExtractor<F extends Field> {
-    boolean canExtract(Field field);
-
-    void extract(int sameFieldNameCount, F field, String fieldName, AcroFields fields);
+public class PageNumberEvaluatorTest {
+    @Test
+    public void test_() {
+        PageNumberEvaluator evaluator = new PageNumberEvaluator();
+        assertTrue(Arrays.equals(new int[]{1}, evaluator.getPages(new float[]{1.0f, 2.0f, 3.0f, 4.0f, 5.0f})));
+        assertTrue(Arrays.equals(new int[]{1, 6}, evaluator.getPages(new float[]{1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f})));
+    }
 }

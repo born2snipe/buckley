@@ -12,12 +12,14 @@
  */
 package buckley.extract;
 
-import buckley.Field;
-import com.lowagie.text.pdf.AcroFields;
 
-
-public interface ITextFieldExtractor<F extends Field> {
-    boolean canExtract(Field field);
-
-    void extract(int sameFieldNameCount, F field, String fieldName, AcroFields fields);
+public class PageNumberEvaluator {
+    public int[] getPages(float[] positions) {
+        int[] pages = new int[positions.length / 5];
+        int index = 0;
+        for (int i = 0; i < positions.length; i += 5) {
+            pages[index++] = (int) positions[i];
+        }
+        return pages;
+    }
 }

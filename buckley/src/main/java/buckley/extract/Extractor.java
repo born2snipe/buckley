@@ -27,16 +27,18 @@ import java.util.List;
 public class Extractor {
     private PdfReaderFactory pdfReaderFactory;
     private FieldFactory fieldFactory;
+    private PageNumberEvaluator pageNumberEvaluator;
     private List<ITextFieldExtractor> fieldExtractors = new ArrayList<ITextFieldExtractor>();
 
     public Extractor() {
-        this(new PdfReaderFactory(), new FieldFactory());
+        this(new PdfReaderFactory(), new FieldFactory(), new PageNumberEvaluator());
         addFieldExtractor(new LocationAndSizeExtractor());
     }
 
-    protected Extractor(PdfReaderFactory pdfReaderFactory, FieldFactory fieldFactory) {
+    protected Extractor(PdfReaderFactory pdfReaderFactory, FieldFactory fieldFactory, PageNumberEvaluator pageNumberEvaluator) {
         this.pdfReaderFactory = pdfReaderFactory;
         this.fieldFactory = fieldFactory;
+        this.pageNumberEvaluator = pageNumberEvaluator;
     }
 
     public Document extract(File file) {
@@ -68,24 +70,26 @@ public class Extractor {
         for (Object key : fields.keySet()) {
             String fieldName = (String) key;
 
-            float[] positions = acroFields.getFieldPositions(fieldName);
-            int pageNumber = (int) positions[0];
+            int[] pageNumbers = pageNumberEvaluator.getPages(acroFields.getFieldPositions(fieldName));
+            int fieldCount = 0;
+            for (int pageNumber : pageNumbers) {
+                Field field = fieldFactory.build(acroFields.getFieldType(fieldName));
+                field.setName(fieldName);
 
-            Field field = fieldFactory.build(acroFields.getFieldType(fieldName));
-            field.setName(fieldName);
-
-            Page page = document.getPage(pageNumber);
-            if (page == null) {
-                page = new Page(pageNumber);
-                document.addPage(page);
-            }
-
-            for (ITextFieldExtractor fieldExtractor : fieldExtractors) {
-                if (fieldExtractor.canExtract(field)) {
-                    fieldExtractor.extract(field, fieldName, acroFields);
+                Page page = document.getPage(pageNumber);
+                if (page == null) {
+                    page = new Page(pageNumber);
+                    document.addPage(page);
                 }
+
+                for (ITextFieldExtractor fieldExtractor : fieldExtractors) {
+                    if (fieldExtractor.canExtract(field)) {
+                        fieldExtractor.extract(fieldCount, field, fieldName, acroFields);
+                    }
+                }
+                page.addField(field);
+                fieldCount++;
             }
-            page.addField(field);
         }
 
         return document;

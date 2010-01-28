@@ -30,13 +30,28 @@ public class LocationAndSizeExtractorTest {
     }
 
     @Test
+    public void test_extract_FieldExistMultipleTimes() {
+        Field field = mock(Field.class);
+        AcroFields acroFields = mock(AcroFields.class);
+
+        when(acroFields.getFieldPositions("field")).thenReturn(new float[]{0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f});
+
+        extractor.extract(1, field, "field", acroFields);
+
+        verify(field).setX(6.0f);
+        verify(field).setY(8.0f);
+        verify(field).setWidth(2.0f);
+        verify(field).setHeight(2.0f);
+    }
+
+    @Test
     public void test_extract() {
         Field field = mock(Field.class);
         AcroFields acroFields = mock(AcroFields.class);
 
         when(acroFields.getFieldPositions("field")).thenReturn(new float[]{0.0f, 1.0f, 2.0f, 3.0f, 4.0f});
 
-        extractor.extract(field, "field", acroFields);
+        extractor.extract(0, field, "field", acroFields);
 
         verify(field).setX(1.0f);
         verify(field).setY(3.0f);
