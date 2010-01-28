@@ -23,8 +23,8 @@ public class XmlDocumentHandler implements DocumentReader, DocumentWriter {
     private XStream xstream = new XStream();
 
     public XmlDocumentHandler() {
-        xstream.alias("textField", buckley.TextField.class);
-        xstream.alias("checkboxField", CheckboxField.class);
+        xstream.alias("text", buckley.TextField.class);
+        xstream.alias("checkbox", CheckboxField.class);
         xstream.alias("page", Page.class);
         xstream.alias("document", Document.class);
         xstream.alias("embeddedFont", EmbeddedFont.class);

@@ -41,15 +41,15 @@ public class AllTextFieldTest extends TestCase {
                 "  <pages>\n" +
                 "    <page number=\"1\">\n" +
                 "      <fields>\n" +
-                "        <textField name=\"firstName\" x=\"262.0\" y=\"55.0\" width=\"130.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"lastName\" x=\"85.0\" y=\"55.0\" width=\"130.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"middleInitial\" x=\"430.0\" y=\"55.0\" width=\"15.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"line1\" x=\"90.0\" y=\"96.0\" width=\"300.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"line2\" x=\"90.0\" y=\"111.0\" width=\"300.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"city\" x=\"85.0\" y=\"125.0\" width=\"125.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"state\" x=\"265.0\" y=\"125.0\" width=\"20.0\" height=\"15.0\"/>\n" +
-                "        <textField name=\"zip\" x=\"327.0\" y=\"125.0\" width=\"60.0\" height=\"15.0\"/>\n" +
-                "        <checkboxField name=\"employed\" x='10' y='10' width='100' height='200' value='on' />" +
+                "        <text name=\"firstName\" x=\"262.0\" y=\"55.0\" width=\"130.0\" height=\"15.0\"/>\n" +
+                "        <text name=\"lastName\" x=\"85.0\" y=\"55.0\" width=\"130.0\" height=\"15.0\"/>\n" +
+                "        <text name=\"middleInitial\" x=\"430.0\" y=\"55.0\" width=\"15.0\" height=\"15.0\"/>\n" +
+                "        <text name=\"line1\" x=\"90.0\" y=\"96.0\" width=\"300.0\" height=\"15.0\"/>\n" +
+                "        <text name=\"line2\" x=\"90.0\" y=\"111.0\" width=\"300.0\" height=\"15.0\"/>\n" +
+                "        <text name=\"city\" x=\"85.0\" y=\"125.0\" width=\"125.0\" height=\"15.0\"/>\n" +
+                "        <text name=\"state\" x=\"265.0\" y=\"125.0\" width=\"20.0\" height=\"15.0\"/>\n" +
+                "        <text name=\"zip\" x=\"327.0\" y=\"125.0\" width=\"60.0\" height=\"15.0\"/>\n" +
+                "        <checkbox name=\"employed\" x='10' y='10' width='100' height='200' value='on' ><border/></checkbox>" +
                 "      </fields>\n" +
                 "    </page>\n" +
                 "  </pages>\n" +

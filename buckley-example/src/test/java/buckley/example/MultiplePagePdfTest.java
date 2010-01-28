@@ -41,12 +41,12 @@ public class MultiplePagePdfTest extends TestCase {
                 "  <pages>\n" +
                 "    <page number=\"1\">\n" +
                 "      <fields>\n" +
-                "        <textField name=\"field1\" x=\"100.0\" y=\"100.0\" width=\"100.0\" height=\"15.0\"/>\n" +
+                "        <text name=\"field1\" x=\"100.0\" y=\"100.0\" width=\"100.0\" height=\"15.0\"/>\n" +
                 "      </fields>\n" +
                 "    </page>\n" +
                 "    <page number=\"2\">\n" +
                 "      <fields>\n" +
-                "        <textField name=\"field2\" x=\"100.0\" y=\"100.0\" width=\"100.0\" height=\"15.0\"/>\n" +
+                "        <text name=\"field2\" x=\"100.0\" y=\"100.0\" width=\"100.0\" height=\"15.0\"/>\n" +
                 "      </fields>\n" +
                 "    </page>\n" +
                 "  </pages>\n" +
